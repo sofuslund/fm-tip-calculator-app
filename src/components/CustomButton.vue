@@ -1,11 +1,9 @@
 <script>
 export default {
     data() {
-        return {
-
-        }
-    }
-}
+        return {};
+    },
+};
 </script>
 
 <template>
@@ -18,10 +16,10 @@ export default {
 .custom-btn {
     color: var(--very-dark-cyan);
     background-color: var(--strong-cyan);
-    font-size: 1rem;
+    font-size: 1.2rem;
     width: 100%;
-    height: 2.5em;
+    padding: .5em 0;
     border: none;
-    border-radius: .3em;
+    border-radius: 0.3em;
 }
 </style>
