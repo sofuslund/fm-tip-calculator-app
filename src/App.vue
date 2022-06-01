@@ -1,4 +1,5 @@
 <script>
+import Dinero from "dinero.js"
 import CustomInput from "./components/CustomInput.vue";
 import CustomButton from "./components/CustomButton.vue";
 import PriceTag from "./components/PriceTag.vue";
@@ -7,9 +8,42 @@ import NumberRadio from "./components/NumberRadio.vue";
 export default {
     data() {
         return {
-            personTipAmount: 0,
-            total: 0,
+            bill: 0,
+            tip: 0,
+            people: 0,
+            tipResetTrigger: false
         };
+    },
+    methods: {
+        reset() {
+            this.tipResetTrigger = !this.tipResetTrigger;
+            this.bill = this.people = "";
+        },
+        parse(val) {
+            return (Math.round(parseFloat(val) * 100) / 100) || 0;
+        }
+    },
+    computed: {
+        dineroBill: {
+            get() {
+                return Dinero({amount: Math.round(this.parse(this.bill) * 100), currency: "USD"});
+            }, 
+            set(v) {
+               bill = v.getAmount(); 
+            }
+        },
+        dineroPersonTipAmount() {
+            if(this.parse(this.people) == 0) return 0; // Can't divide by zero
+            return this.dineroBill.divide(this.parse(this.people)).percentage(this.parse(this.tip));
+        },
+        personTipAmount() {
+            if(this.parse(this.people) == 0) return 0;
+            return (this.dineroPersonTipAmount.getAmount()/100).toFixed(2);
+        },
+        personTotal() {
+            if(this.parse(this.people) == 0) return 0; // Can't divide by zero
+            return (this.dineroBill.divide(this.parse(this.people)).add(this.dineroPersonTipAmount).getAmount() / 100).toFixed(2);
+        }
     },
     components: {
         CustomInput,
@@ -27,6 +61,7 @@ export default {
             <div class="flex-item">
                 <section>
                     <CustomInput
+                        v-model="bill"
                         label="Bill"
                         icon="/src/assets/img/icon-dollar.svg"
                     ></CustomInput>
@@ -36,13 +71,16 @@ export default {
                         label="Select Tip %"
                         :values="[5, 10, 15, 25, 50]"
                         suffix="%"
+                        @update-val="val => tip = val"
+                        :resetTrigger="tipResetTrigger"
                     ></NumberRadio>
                 </section>
                 <section>
                     <CustomInput
+                        v-model="people"
                         label="Number of People"
                         icon="/src/assets/img/icon-person.svg"
-                        cantBeZero
+                        cant-be-zero
                     ></CustomInput>
                 </section>
             </div>
@@ -58,10 +96,10 @@ export default {
                         <PriceTag
                             label="Total"
                             sublabel="/ person"
-                            :amount="total"
+                            :amount="personTotal"
                         ></PriceTag>
                     </div>
-                    <CustomButton class="btn">RESET</CustomButton>
+                    <CustomButton @click="reset" class="btn">RESET</CustomButton>
                 </section>
             </div>
             <div class="attribution">
@@ -213,6 +251,7 @@ section {
         flex-direction: column;
         margin: 0 0;
         height: 100%;
+        padding: 2em;
     }
 }
 </style>

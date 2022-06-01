@@ -3,11 +3,12 @@ export default {
     data() {
         return {};
     },
+    emits: ["click"]
 };
 </script>
 
 <template>
-    <button class="custom-btn">
+    <button @click="$emit('click')" class="custom-btn">
         <slot></slot>
     </button>
 </template>

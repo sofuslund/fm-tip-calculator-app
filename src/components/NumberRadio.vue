@@ -1,18 +1,37 @@
 <script>
+import { nextTick } from "vue";
 import CustomButton from "./CustomButton.vue";
 import CustomInput from "./CustomInput.vue";
 export default {
     data() {
         return {
             selected: NaN,
+            inputVal: "",
         };
     },
     methods: {
-        btnClick(idx) {
+        async btnClick(idx, val) {
+            this.inputVal = "";
+            // When the input value gets altered it is now the selected tip percentage. 
+            // To avoid this we first alter the input value and then wait for the dom 
+            // to update in "next tick" and then change the selected index
+            await nextTick();
             this.selected = idx;
+            this.$emit("updateVal", val);
         },
     },
-    props: ["suffix", "values", "label"],
+    watch: {
+        inputVal(v) {
+            this.selected = NaN;
+            this.$emit("updateVal", parseFloat(this.inputVal) || 0);
+        }, 
+        resetTrigger() {
+            this.selected = NaN;
+            this.inputVal = "";
+        }
+    },
+    props: ["resetTrigger", "suffix", "values", "label", "modelValue"],
+    emits: ["updateVal"],
     components: {
         CustomButton,
         CustomInput,
@@ -27,13 +46,13 @@ export default {
             <CustomButton
                 class="btn flex-item"
                 v-for="(value, idx) in values"
-                @click="btnClick(idx)"
+                @click="btnClick(idx, value)"
                 :class="{ selected: selected == idx }"
                 :key="idx"
             >
                 {{ value }}{{ suffix }}
             </CustomButton>
-            <CustomInput class="flex-item input">Custom</CustomInput>
+            <CustomInput v-model="inputVal" placeholder="Custom" class="flex-item input"></CustomInput>
         </div>
     </div>
 </template>

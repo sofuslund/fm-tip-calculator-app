@@ -2,17 +2,25 @@
 export default {
     data() {
         return {
-            value: 0,
             inputStyle: {
                 background: `url("${this.icon}") no-repeat .5em center/auto .7em var(--very-light-grayish-cyan)`,
             },
         };
     },
-    mounted() {
-        console.log(this.$slots.default);
-        // value = parseInt(this.$refs.placeholder.innerText);
+    computed: {
+        value: {
+            get() {
+                return this.modelValue;
+            },
+            set(val) {
+                this.$emit("update:modelValue", val);
+            }
+        }
     },
-    props: { label: String, icon: String, cantBeZero: Boolean },
+    mounted() {
+    },
+    props: { modelValue: [Number, String], label: String, icon: String, cantBeZero: Boolean, placeholder: String},
+    emits: ["update:modelValue"]
 };
 </script>
 
@@ -30,7 +38,8 @@ export default {
         </div>
         <input
             class="input"
-            :style="inputStyle"
+            :placeholder="placeholder"
+            :style="inputStyle" 
             type="number"
             min="0"
             v-model="value"
