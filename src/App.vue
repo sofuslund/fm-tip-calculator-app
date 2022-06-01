@@ -5,6 +5,9 @@ import CustomButton from "./components/CustomButton.vue";
 import PriceTag from "./components/PriceTag.vue";
 import NumberRadio from "./components/NumberRadio.vue";
 
+import iconDollarURL from "./assets/img/icon-dollar.svg";
+import iconPersonURL from "./assets/img/icon-person.svg";
+
 export default {
     data() {
         return {
@@ -24,6 +27,12 @@ export default {
         }
     },
     computed: {
+        iconDollarURL() {
+            return iconDollarURL;
+        },
+        iconPersonURL() {
+            return iconPersonURL;
+        },
         dineroBill: {
             get() {
                 return Dinero({amount: Math.round(this.parse(this.bill) * 100), currency: "USD"});
@@ -63,7 +72,7 @@ export default {
                     <CustomInput
                         v-model="bill"
                         label="Bill"
-                        icon="/src/assets/img/icon-dollar.svg"
+                        :icon="iconDollarURL"
                     ></CustomInput>
                 </section>
                 <section>
@@ -79,7 +88,7 @@ export default {
                     <CustomInput
                         v-model="people"
                         label="Number of People"
-                        icon="/src/assets/img/icon-person.svg"
+                        :icon="iconPersonURL"
                         cant-be-zero
                     ></CustomInput>
                 </section>
