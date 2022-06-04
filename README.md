@@ -27,7 +27,7 @@ Users should be able to:
 
 ### Links
 
-- Solution URL: [https://github.com/sofuslund/fm-tip-calculator-app](https://github.com/sofuslund/fm-tip-calculator-app)
+- Solution URL: [https://www.frontendmentor.io/solutions/tip-calculator-app-using-vuejs-NrON5sod5g](https://www.frontendmentor.io/solutions/tip-calculator-app-using-vuejs-NrON5sod5g)
 - Live Site URL: [https://fm03-tip-calculator-app.netlify.app/](https://fm03-tip-calculator-app.netlify.app/)
 
 ## My process
